@@ -1,31 +1,34 @@
 from graphviz import Digraph
 
-def create_er_diagram(class_name, attributes, primary_key):
+def create_er_diagram(classes):
     # Создаем новый граф
-    dot = Digraph()
+    dot = Digraph(format='png')
 
-    # Форматируем метку с классом и атрибутами
-    label = f"{class_name} | {{"
-    
-    # Добавляем атрибуты
-    for attr in attributes:
-        if attr == primary_key:
-            label += f"<f0> {attr} (PK) | "
-        else:
-            label += f"<f0> {attr} | "
-    
-    label = label.rstrip(" | ") + "}}"
+    # Добавляем классы
+    for class_name, attributes in classes.items():
+        # Формируем метку для узла
+        label = f"{class_name} | {{"
+        for attr in attributes:
+            if attr == attributes[0]:
+                label += f"<f0> {attr} (PK) | "
+            else:
+                label += f"<f0> {attr} | "
+        label = label.rstrip(" | ") + "}}"
 
-    # Добавляем класс как узел
-    dot.node(class_name, label=label, shape='record')
+        # Добавляем класс как узел
+        dot.node(class_name, label=label, shape='record')
+
+    # Добавляем связи
+    dot.edge('User', 'Role', constraint='true')
 
     # Сохраняем диаграмму в файл
-    dot.render('er_diagram', format='png', cleanup=True)
+    dot.render('er_diagram', cleanup=True)
     print("ER-диаграмма создана и сохранена как 'er_diagram.png'.")
 
 # Пример использования
-class_name = "User"
-attributes = ["id", "name", "email", "created_at"]
-primary_key = "id"
+classes = {
+    'User': ['id', 'name', 'role_id'],
+    'Role': ['id', 'name']
+}
 
-create_er_diagram(class_name, attributes, primary_key)
+create_er_diagram(classes)
