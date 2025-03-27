@@ -8,16 +8,16 @@ def create_er_diagram():
     with dot.subgraph(name='cluster_users') as c:
         c.attr(style='filled', color='lightgrey')
         c.node_attr.update(style='filled', color='white')
-        c.node('user_id', label=r'PK\nid')
-        c.node('user_name', label=r'name')
-        c.node('user_role_id', label=r'role_id')
+        c.node('user_id', label='PK\nid')
+        c.node('user_name', label='name')
+        c.node('user_role_id', label='role_id')
 
     # Добавляем сущность "Roles"
     with dot.subgraph(name='cluster_roles') as c:
         c.attr(style='filled', color='lightgrey')
         c.node_attr.update(style='filled', color='white')
-        c.node('role_id', label=r'PK\nid')
-        c.node('role_name', label=r'name')
+        c.node('role_id', label='PK\nid')
+        c.node('role_name', label='name')
 
     # Добавляем связь между сущностями
     dot.edge('user_role_id', 'role_id', label='1:N')
