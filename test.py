@@ -4,20 +4,23 @@ def create_er_diagram(class_name, attributes, primary_key):
     # Создаем новый граф
     dot = Digraph()
 
-    # Добавляем класс как узел
-    label = f"{class_name}\n"
+    # Форматируем метку с классом и атрибутами
+    label = f"{class_name} | {{"
     
     # Добавляем атрибуты
     for attr in attributes:
-        label += f"{attr}\n"
+        if attr == primary_key:
+            label += f"<f0> {attr} (PK) | "
+        else:
+            label += f"<f0> {attr} | "
     
-    # Добавляем первичный ключ
-    label += f"PK: {primary_key}"
+    label = label.rstrip(" | ") + "}}"
 
+    # Добавляем класс как узел
     dot.node(class_name, label=label, shape='record')
 
     # Сохраняем диаграмму в файл
-    dot.render('er_diagram_test', format='png', cleanup=True)
+    dot.render('er_diagram', format='png', cleanup=True)
     print("ER-диаграмма создана и сохранена как 'er_diagram.png'.")
 
 # Пример использования
@@ -26,4 +29,3 @@ attributes = ["id", "name", "email", "created_at"]
 primary_key = "id"
 
 create_er_diagram(class_name, attributes, primary_key)
-
